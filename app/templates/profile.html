@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}FakePinterest | Perfil - {{ user.username }}{% endblock title %}
+
+{% block body %}
+<body>
+    {% include 'partials/navbar.html' %}
+
+    <div class="container">
+        {% if image_form %}
+            <form action="{{ url_for('profile', user_id=user.id) }}" method="post" enctype="multipart/form-data" class="bloco-add-img">
+                {{ image_form.csrf_token }}
+
+                <h2>Seja bem-vindo(a) ao FakePinterest, {{ user.username }}!</h2>
+
+                <h3>Enviar imagem</h3>
+
+                <div class="bloco-arquivo">
+                    <label for="foto" class="botao-arquivo">
+                        Escolher arquivo
+                        {{ image_form.image(class="input-arquivo", id="foto") }}
+                    </label>
+                    <span id="imagem-arquivo"></span>
+                </div>
+
+                {{ image_form.button(class="botao-login") }}
+            </form>                
+        {% else %}
+            <div class="bloco-add-img">
+                <h2>{{ user.username }} - Ver perfil</h2>
+            </div>
+        {% endif %}
+
+        <div class="conteudo">
+            {% for image in user.images %}
+                <div class="bloco-imagem">
+                    <img src="{{ url_for('static', filename='uploaded-images/{}'.format(image.image)) }}" alt="Imagem adicionada por: {{ user.username }}">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        let input = document.getElementById('foto');
+        let imagemArquivo = document.getElementById('imagem-arquivo');
+
+        input.addEventListener('change', () => {
+            let inputImagem = document.querySelector('input[type=file]').files[0];
+
+            imagemArquivo.classList.add('visivel');
+            imagemArquivo.innerText = inputImagem.name;
+        });
+    </script>
+</body>
+{% endblock body %}

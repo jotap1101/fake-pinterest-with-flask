@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}FakePinterest | Feed{% endblock title %}
+
+{% block content %}
+
+{% include 'partials/navbar.html' %}
+
+<div class="container">
+    <div class="conteudo">
+        {% for image in images %}
+            <a href="{{ url_for('profile', user_id=image.user.id) }}" class="bloco-imagem">
+                <img src="{{ url_for('static', filename='uploaded-images/{}'.format(image.image)) }}" alt="Imagem adicionada por: {{ image.user.username }}">
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}
